@@ -18,7 +18,7 @@ sub plugin_info {
         author    => "Difegue",
         version   => "2.3",
         description =>
-          "Handles login to E-H. If you have an account that can access fjorded content or exhentai, adding the credentials here will make more archives available for parsing.",
+          "处理E-H登录。 如果您有一个可以访问 fjorded 内容或 exhentai 的帐户，则在此处添加凭据将使更多档案可用于解析.",
         parameters => [
             { type => "int",    desc => "ipb_member_id cookie" },
             { type => "string", desc => "ipb_pass_hash cookie" },
