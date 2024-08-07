@@ -7,67 +7,65 @@ no warnings 'uninitialized';
 use Mojo::UserAgent;
 use LANraragi::Utils::Logging qw(get_logger);
 
-#Meta-information about your plugin.
+# 插件的元信息
 sub plugin_info {
 
     return (
-		#Standard metadata
-        name      => "Pixiv Login",
+        # 标准元数据
+        name      => "Pixiv 登录",
         type      => "login",
         namespace => "pixivlogin",
         author    => "psilabs-dev",
         version   => "0.1",
         description =>
-          "Handles login to Pixiv. See https://github.com/Nandaka/PixivUtil2/wiki for how to obtain the cookie.",
+          "处理 Pixiv 的登录。请参阅 https://github.com/Nandaka/PixivUtil2/wiki 以获取如何获取 cookie 的信息。",
         parameters => [
-            { type => "string", desc => "Browser UserAgent (Default is 'Mozilla/5.0')" },
-			{ type => "string", desc => "Cookie (PHP session ID)" }
+            { type => "string", desc => "浏览器 UserAgent（默认值为 'Mozilla/5.0'）" },
+            { type => "string", desc => "Cookie（PHP 会话 ID）" }
         ]
     );
 
 }
 
-
-# Mandatory function to be implemented by your login plugin
-# Returns a Mojo::UserAgent object only!
+# 必须实现的函数，返回一个 Mojo::UserAgent 对象
 sub do_login {
 
-    # Login plugins only receive the parameters entered by the user.
+    # 登录插件只接收用户输入的参数。
     shift;
     my ( $useragent, $php_session_id ) = @_;
     return get_user_agent( $useragent, $php_session_id );
 }
 
-# Returns the UA object created.
+# 返回创建的 UserAgent 对象
 sub get_user_agent {
 
     my ( $useragent, $php_session_id ) = @_;
 
-    # assign default user agent.
+    # 设置默认的 UserAgent。
     if ( $useragent eq '' ) {
         $useragent = "Mozilla/5.0";
     }
 
-    my $logger  = get_logger( "Pixiv Login", "plugins" );
-    my $ua      = Mojo::UserAgent -> new;
+    my $logger  = get_logger( "Pixiv 登录", "plugins" );
+    my $ua      = Mojo::UserAgent->new;
 
     if ( $useragent ne "" && $php_session_id ne "") {
 
-        # assign user agent.
-        $ua -> transactor -> name($useragent);
+        # 设置 UserAgent。
+        $ua->transactor->name($useragent);
 
-        # add cookie
-        $ua -> cookie_jar -> add(
-            Mojo::Cookie::Response -> new(
-                name    =>  "PHPSESSID",
-                value   =>  $php_session_id,
-                domain  =>  'pixiv.net',
-                path    =>  '/'
+        # 添加 Cookie
+        $ua->cookie_jar->add(
+            Mojo::Cookie::Response->new(
+                name    => "PHPSESSID",
+                value   => $php_session_id,
+                domain  => 'pixiv.net',
+                path    => '/'
             )
-        )
+        );
 
     } else {
-        $logger -> info("No cookies provided, returning blank UserAgent.");
+        $logger->info("未提供 Cookie，返回空的 UserAgent。");
     }
 
     return $ua;
