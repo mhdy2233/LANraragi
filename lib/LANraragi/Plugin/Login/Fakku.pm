@@ -16,9 +16,9 @@ sub plugin_info {
         author    => "Nodja",
         version   => "0.1",
         description =>
-          "处理fakku登录。cookie的有效期只有 7 天，所以不要忘记更新它.",
+          "处理 Fakku 登录。Cookie 仅在 7 天内有效，请不要忘记更新它。",
         parameters => [
-            { type => "string", desc => "fakku_sid cookie value" }
+            { type => "string", desc => "fakku_sid cookie 值" }
         ]
     );
 
@@ -29,11 +29,11 @@ sub do_login {
     shift;
     my ( $fakku_sid ) = @_;
 
-    my $logger = get_logger( "Fakku Login", "plugins" );
+    my $logger = get_logger( "Fakku 登录", "plugins" );
     my $ua     = Mojo::UserAgent->new;
 
     if ( $fakku_sid ne "" ) {
-        $logger->info("Cookie provided ($fakku_sid)!");
+        $logger->info("提供了 Cookie ($fakku_sid)!");
         $ua->cookie_jar->add(
             Mojo::Cookie::Response->new(
                 name   => 'fakku_sid',
