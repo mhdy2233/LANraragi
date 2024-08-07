@@ -16,7 +16,7 @@ sub plugin_info {
         author    => "Nodja",
         version   => "0.1",
         description =>
-          "Handles login to fakku. The cookie is only valid for 7 days so don't forget to update it.",
+          "处理fakku登录。cookie的有效期只有 7 天，所以不要忘记更新它.",
         parameters => [
             { type => "string", desc => "fakku_sid cookie value" }
         ]
@@ -43,7 +43,7 @@ sub do_login {
             )
         );
     } else {
-        $logger->info("No cookies provided, returning blank UserAgent.");
+        $logger->info("没有提供 Cookies，返回空的 UserAgent。");
     }
 
     return $ua;
