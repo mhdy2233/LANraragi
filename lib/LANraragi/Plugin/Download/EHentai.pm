@@ -21,7 +21,7 @@ sub plugin_info {
         author     => "Difegue",
         version    => "1.0",
         description =>
-          "Downloads the given e*hentai URL and adds it to LANraragi. This uses GP to call the archiver, so make sure you have enough!",
+          "下载给定的 e*hentai URL 并将其添加到 LANraragi。 这将使用 GP 调用存档，因此请确保您有足够的GP!",
 
         # Downloader-specific metadata
         url_regex => "https?:\/\/e(-|x)hentai.org\/g\/.*\/.*"
@@ -98,8 +98,8 @@ sub provide_url {
     $logger->debug("/archiver.php result: $content");
 
     if ($content =~ /.*Insufficient funds.*/gim) {
-        $logger->debug("Not enough GP, aborting download.");
-        return ( error => "You do not have enough GP to download this URL." );
+        $logger->debug("GP 不够，正在中止下载。");
+        return ( error => "您没有足够的 GP 来下载此 URL。" );
     }
 
     my $finalURL = URI->new();
@@ -107,7 +107,7 @@ sub provide_url {
         # Parse that to get the final URL
         if ( $content =~ /.*document.location = "(.*)".*/gim ) {
             $finalURL = URI->new($1);
-            $logger->info("Final URL obtained: $finalURL");
+            $logger->info("获得的最终URL: $finalURL");
         }
     };
 
