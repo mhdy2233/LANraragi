@@ -23,15 +23,15 @@
 
     <link rel="http://opds-spec.org/facet" 
         href="/api/opds[% api_key_query %]" 
-        title="All Archives" 
-        opds:facetGroup="Categories" 
+        title="所有档案" 
+        opds:facetGroup="类别" 
         [% IF nocat %]opds:activeFacet="true" [% END %]/>
  
     [% FOREACH cat IN catlist %]
     <link rel="http://opds-spec.org/facet" 
         href="/api/opds?category=[% cat.id %][% api_key_and %]" 
         title="[% cat.name %]"  
-        opds:facetGroup="Categories" 
+        opds:facetGroup="类别" 
         [% IF cat.count %]thr:count="[% cat.count %]" [% END %][% IF cat.active %]opds:activeFacet="true" [% END %]/>
     [% END %]
 
@@ -49,9 +49,9 @@
         <dcterms:publisher>[% arc.circle %]</dcterms:publisher>
         <dcterms:issued>[% arc.event %]</dcterms:issued>
         [% IF arc.isnew == "false" %]
-        <category term="Archive" />
+        <category term="档案" />
         [% ELSE %]
-        <category term="New Archive" />
+        <category term="新档案" />
         [% END %]
         <summary>[% arc.tags %]</summary>
 
@@ -61,13 +61,13 @@
         <link rel="http://opds-spec.org/image" href="/api/archives/[% arc.arcid %]/thumbnail[% api_key_query %]" type="image/jpeg" />
         <link rel="http://opds-spec.org/image/thumbnail" href="/api/archives/[% arc.arcid %]/thumbnail[% api_key_query %]"
             type="image/jpeg" />
-        <link rel="http://opds-spec.org/acquisition" href="/api/archives/[% arc.arcid %]/download[% api_key_query %]" title="Download/Read"
+        <link rel="http://opds-spec.org/acquisition" href="/api/archives/[% arc.arcid %]/download[% api_key_query %]" title="下载/阅读"
             type="[% arc.mimetype %]" />
         <link rel="http://vaemendis.net/opds-pse/stream" type="image/jpeg"
             href="/api/opds/[% arc.arcid %]/pse?page={pageNumber}[% api_key_and %]" pse:count="[% arc.pagecount %]" 
             [% IF arc.progress %] pse:lastRead="[% arc.progress %]" [% END %] 
             [% IF arc.lastreaddate %] pse:lastReadDate="[% arc.lastreaddate %]" [% END %]/>
-        <link type="text/html" rel="alternate" title="Open in LANraragi" href="/reader?id=[% arc.arcid %][% api_key_and %]" />
+        <link type="text/html" rel="alternate" title="在 LANraragi 中打开" href="/reader?id=[% arc.arcid %][% api_key_and %]" />
     </entry>
     [% END %]
 

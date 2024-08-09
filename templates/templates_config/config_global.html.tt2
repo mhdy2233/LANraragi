@@ -1,121 +1,117 @@
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Site Title </h2>
+        <h2 class="ih">网站标题</h2>
     </td>
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" value="[% title %]" name="htmltitle"
             type="text">
-        <br>The site title appears on most pages as...their title.
+        <br>网站标题将显示在大多数页面的标题栏中。
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> MOTD </h2>
+        <h2 class="ih">今日信息</h2>
     </td>
     <td class="config-td">
         <input id="motd" class="stdinput" style="width:100%" maxlength="255" size="20" value="[% motd %]" name="motd"
             type="text">
-        <br>Slang for Message of the Day. Appears on top of the main Library view.
+        <br>“今日信息”的缩写。显示在主图书馆视图的顶部。
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Archives per page </h2>
+        <h2 class="ih">每页档案数</h2>
     </td>
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" value="[% pagesize %]" name="pagesize"
             type="number">
-        <br> Number of archives shown on a page in the main list.
+        <br>主列表中每页显示的档案数量。
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Resize Images in Reader </h2>
+        <h2 class="ih">阅读器中调整图像大小</h2>
     </td>
     <td class="config-td">
         [% IF enableresize %]
         <input id="enableresize" name="enableresize" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enableresize" name="enableresize" class="fa" type="checkbox"> [% END %]
         <label for="enableresize">
-            <br> If enabled, pages exceeding a certain size will be resized when viewed to save bandwidth.
-            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> This option can potentially consume a lot
-            of RAM if enabled and used on large images! Use with caution.
+            <br>如果启用，页面超过一定大小时会在查看时调整大小，以节省带宽。
+            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 如果启用且用于大图像，此选项可能会消耗大量 RAM！请谨慎使用。
         </label>
     </td>
 </tr>
 
 <tr class="resizefields">
     <td class="option-td">
-        <h2 class="ih"> Image Size Threshold </h2>
+        <h2 class="ih">图像大小阈值</h2>
     </td>
     <td class="config-td">
         <input id="sizethreshold" class="stdinput" type="number" style="width:100%" maxlength="255" size="20"
             value="[% sizethreshold %]" name="sizethreshold">
-        <br>(in KBs.) Maximum size an image can reach before being resized.
+        <br>（以 KB 为单位。）图像达到此大小后将被调整大小的最大值。
     </td>
 </tr>
 
 <tr class="resizefields">
     <td class="option-td">
-        <h2 class="ih"> Resize Quality </h2>
+        <h2 class="ih">调整大小质量</h2>
     </td>
     <td class="config-td">
         <input id="readerquality" class="stdinput" type="number" min="0" max="100" style="width:100%" maxlength="255"
             size="20" value="[% readerquality %]" name="readerquality">
-        <br> Quality of the resized images. Less quality = Smaller image. (0-100)
+        <br>调整大小图像的质量。质量较低 = 图像较小。（0-100）
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Clientside Progress Tracking </h2>
+        <h2 class="ih">客户端进度跟踪</h2>
     </td>
     <td class="config-td">
         [% IF localprogress %]
         <input id="localprogress" name="localprogress" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="localprogress" name="localprogress" class="fa" type="checkbox"> [% END %]
         <label for="localprogress">
-            <br>Enabling this option will save reading progression on the browser (through localStorage) instead of the
-            server. <br />
-            Consider toggling this option if you're sharing the LANraragi instance with multiple users!
+            <br>启用此选项将把阅读进度保存在浏览器（通过 localStorage）中，而不是服务器上。<br />
+            如果您与多个用户共享 LANraragi 实例，请考虑切换此选项！
         </label>
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Debug Mode </h2>
+        <h2 class="ih">调试模式</h2>
     </td>
     <td class="config-td">
         [% IF devmode %]
         <input id="devmode" name="devmode" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="devmode" name="devmode" class="fa" type="checkbox"> [% END %]
         <label for="devmode">
-            <br>Enabling Debug Mode will show more logs and disable update nagging. <br />Fully effective after
-            restarting LANraragi.
+            <br>启用调试模式将显示更多日志，并禁用更新提示。<br />在重新启动 LANraragi 后完全生效。
         </label>
     </td>
 </tr>
 
-
 <tr>
     <td class="option-td">
-        <input id='clean-db' class='stdbtn' type='button' value='Clean Database' />
+        <input id='clean-db' class='stdbtn' type='button' value='清理数据库' />
     </td>
     <td class="config-td">
-        Cleaning the database will remove entries that aren't on your filesystem.
+        清理数据库将删除文件系统中不存在的条目。
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <input id='drop-db' class='stdbtn' type='button' value='Reset Database' />
+        <input id='drop-db' class='stdbtn' type='button' value='重置数据库' />
     </td>
     <td class="config-td">
-        <span style="color:red"><i class="fas fa-exclamation-triangle"></i> Danger zone!</span> <br>
-        Clicking this button will reset the entire database and delete all settings and metadata. <br>
+        <span style="color:red"><i class="fas fa-exclamation-triangle"></i> 危险区域！</span> <br>
+        点击此按钮将重置整个数据库并删除所有设置和元数据。<br>
     </td>
 </tr>

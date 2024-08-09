@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-	<title>[% title %] - Logs</title>
+	<title>[% title %] - 日志</title>
 
 	<meta name="viewport" content="width=device-width" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -11,50 +11,50 @@
 
 	<link type="image/png" rel="icon" href="favicon.ico" />
 	<link rel="manifest" href="app.webappmanifest" />
-	<link rel="stylesheet" type="text/css" href="/css/lrr.css?[% version%]" />
+	<link rel="stylesheet" type="text/css" href="/css/lrr.css?[% version %]" />
 
 	<link rel="stylesheet" type="text/css" href="./css/vendor/fontawesome-all.min.css" />
 	<link rel="stylesheet" type="text/css" href="/css/vendor/ReactToastify.min.css" />
 	[% csshead %]
 
-	<script src="./js/vendor/jquery.min.js" type="text/JAVASCRIPT"></script>
-	<script src="/js/vendor/preact.umd.js" type="text/JAVASCRIPT"></script>
-	<script src="/js/vendor/hooks.umd.js" type="text/JAVASCRIPT"></script>
-	<script src="/js/vendor/compat.umd.js" type="text/JAVASCRIPT"></script>
+	<script src="./js/vendor/jquery.min.js" type="text/javascript"></script>
+	<script src="/js/vendor/preact.umd.js" type="text/javascript"></script>
+	<script src="/js/vendor/hooks.umd.js" type="text/javascript"></script>
+	<script src="/js/vendor/compat.umd.js" type="text/javascript"></script>
 	<script>window.React = window.preactCompat; window.react = window.preactCompat;</script>
-	<script src="/js/vendor/clsx.min.js" type="text/JAVASCRIPT"></script>
-	<script src="/js/vendor/react-toastify.umd.js" type="text/JAVASCRIPT"></script>
+	<script src="/js/vendor/clsx.min.js" type="text/javascript"></script>
+	<script src="/js/vendor/react-toastify.umd.js" type="text/javascript"></script>
 
-	<script src="./js/common.js?[% version%]" type="text/JAVASCRIPT"></script>
-	<script src="./js/logs.js?[% version%]" type="text/JAVASCRIPT"></script>
+	<script src="./js/common.js?[% version %]" type="text/javascript"></script>
+	<script src="./js/logs.js?[% version %]" type="text/javascript"></script>
 </head>
 
 <body>
 
 	<div class='ido' style='text-align:center'>
-		<h2 class='ih' style='text-align:center'>Application Logs</h2>
+		<h2 class='ih' style='text-align:center'>应用日志</h2>
 
 		<br>
-		You can check LANraragi logs here for debugging purposes.<br>
-		By default, this view only shows the last 100 lines of each logfile, newest lines last. <br><br>
+		您可以在这里查看 LANraragi 的日志以进行调试。<br>
+		默认情况下，此视图仅显示每个日志文件的最后 100 行，最新的行在最后。<br><br>
 		<ul>
-			<li>General Logs pertain to the main application. </li>
-			<li>Shinobu Logs correspond to the Background Worker.</li>
-			<li>Plugin Logs are reserved for metadata plugins only. </li>
-			<li>Mojolicious logs won't tell much unless you're running Debug Mode. </li>
-			<li>Redis logs won't be available from here if you're running from source! </li>
+			<li>一般日志涉及主应用程序。</li>
+			<li>Shinobu 日志对应于后台工作者。</li>
+			<li>插件日志仅用于元数据插件。</li>
+			<li>Mojolicious 日志在调试模式下才有用。</li>
+			<li>如果您从源代码运行，Redis 日志将无法从此处查看！</li>
 		</ul>
 		<br><br>
 
-		<h1 class='ih' style='float:left; margin-left: 5%;'>Currently Viewing: <span id="indicator">general</span></h1>
+		<h1 class='ih' style='float:left; margin-left: 5%;'>当前查看：<span id="indicator">general</span></h1>
 
 		<div style="margin-right: 5%;float: right;">
 
-			<a id="refresh" href="#" title="Refresh">
+			<a id="refresh" href="#" title="刷新">
 				<i style="padding-right: 10px;" class="fa fa-sync-alt fa-2x"></i>
 			</a>
 
-			Lines: <input type="number" min="0" value="100" id="loglines" style="width: 60px;">
+			行数：<input type="number" min="0" value="100" id="loglines" style="width: 60px;">
 
 		</div>
 
@@ -72,18 +72,18 @@
 
 		<br><br>
 		<span id='buttonstagging'>
-			<input id="show-general" type='button' value='View LANraragi Logs' class='stdbtn'>
+			<input id="show-general" type='button' value='查看 LANraragi 日志' class='stdbtn'>
 
-			<input id="show-shinobu" type='button' value='View Shinobu Logs' class='stdbtn'>
+			<input id="show-shinobu" type='button' value='查看 Shinobu 日志' class='stdbtn'>
 
-			<input id="show-plugins" type='button' value='View Plugin Logs' class='stdbtn'>
+			<input id="show-plugins" type='button' value='查看插件日志' class='stdbtn'>
 
-			<input id="show-mojo" type='button' value='View Mojolicious Logs' class='stdbtn'>
+			<input id="show-mojo" type='button' value='查看 Mojolicious 日志' class='stdbtn'>
 
-			<input id="show-redis" type='button' value='View Redis Logs' class='stdbtn'>
+			<input id="show-redis" type='button' value='查看 Redis 日志' class='stdbtn'>
 
 			<br><br>
-			<input id='return' class='stdbtn' type='button' value='Return to Library' />
+			<input id='return' class='stdbtn' type='button' value='返回到库' />
 
 		</span>
 

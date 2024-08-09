@@ -1,9 +1,9 @@
-<!-- LRR Standard Footer -->
+<!-- LRR 标准页脚 -->
 
 <p class="ip">
     [% IF descstr %]
     [% descstr %]
     <br>
     [% END %]
-    Powered by <a href="https://github.com/Difegue/LANraragi"> LANraragi.</a>
+    由 <a href="https://github.com/Difegue/LANraragi">LANraragi</a> 提供支持。
 </p>
