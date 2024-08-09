@@ -1,3 +1,4 @@
+*该版本为官方版0.9.21*
 LANraragi   
 ===========
 
@@ -5,9 +6,9 @@ LANraragi
 
 默认使用存储卷可根据需要自行更换为本机目录，存储卷须手动提升权限777
 
-docker安装请docker pull mhdy2233/lanraragi_cn_mhdy:0.2
+**docker安装请docker pull mhdy2233/lanraragi_cn_mhdy:0.2**
 
-1panel安装请将该目录https://github.com/mhdy2233/appstore/tree/localApps/apps/lanraragi 下载到该路径1panel/resource/apps/local/
+**1panel安装请将该目录https://github.com/mhdy2233/appstore/tree/localApps/apps/lanraragi 下载到该路径1panel/resource/apps/local/**
 
 #### 💬 与其他LANraragi用户在[Discord](https://discord.gg/aRQxtbg)或[GitHub Discussions](https://github.com/Difegue/LANraragi/discussions)交流  
 
