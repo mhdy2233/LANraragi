@@ -1,10 +1,11 @@
 package LANraragi::Plugin::Metadata::Pixiv;
 
+use utf8;
 use strict;
 use warnings;
 
-# Plugins can freely use all Perl packages already installed on the system 
-# Try however to restrain yourself to the ones already installed for LRR (see tools/cpanfile) to avoid extra installations by the end-user.
+# 插件可以自由使用系统上已安装的所有 Perl 包
+# 但请尽量限制使用已为 LRR 安装的包（见 tools/cpanfile），以避免用户需要额外安装。
 use Mojo::DOM;
 use Mojo::JSON qw(decode_json);
 use Mojo::UserAgent;
@@ -12,70 +13,70 @@ use Mojo::UserAgent;
 use Time::Piece;
 use Time::Local;
 
-# You can also use LRR packages when fitting.
-# All packages are fair game, but only functions explicitly exported by the Utils packages are supported between versions.
-# Everything else is considered internal API and can be broken/renamed between versions.
+# 你也可以使用 LRR 包（如果适用）。
+# 所有包都可以使用，但只有 Utils 包中显式导出的函数在版本间受到支持。
+# 其他一切被认为是内部 API 可能在版本间被破坏/重命名。
 use LANraragi::Model::Plugins;
 use LANraragi::Utils::Logging qw(get_plugin_logger);
 
-#Meta-information about your plugin.
+# 插件的元信息
 sub plugin_info {
 
     return (
-        #Standard metadata
+        # 标准元数据
         name        => "Pixiv",
         type        => "metadata",
         namespace   => "pixivmetadata",
         login_from  => "pixivlogin",
         author      => "psilabs-dev",
         version     => "0.1",
-        description => "Retrieve metadata of a Pixiv artwork by its artwork ID.
-            <br>Supports ID extraction from these file formats: \"{Id} Title\" or \"pixiv_{Id} Title\".
+        description => "通过艺术作品 ID 获取 Pixiv 艺术作品的元数据。
+            <br>支持从以下文件格式提取 ID: \"{Id} Title\" 或 \"pixiv_{Id} Title\"。
             <br>
-            <br><i class='fa fa-exclamation-circle'></i> Pixiv enforces a rate limit on API requests, and may suspend/ban your account for overuse.
+            <br><i class='fa fa-exclamation-circle'></i> Pixiv 对 API 请求施加了速率限制，过度使用可能会暂停/禁止你的账户。
         ",
-        icon        => "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAUABQDAREAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAwYABAUH/8QAJBAAAgICAgICAgMAAAAAAAAAAQIDBAUGABESIQcxImETQVH/xAAZAQACAwEAAAAAAAAAAAAAAAADBgACCAX/xAAoEQABBAEDAgYDAQAAAAAAAAABAgMEEQAFITESUQYTFEFhkTJxocH/2gAMAwEAAhEDEQA/ANfRvi3MbpRvZxrlfG4jHQT2J7U35PIsKB5FhjHuRgpHf0B5DsjvmrNV15nTHERwkrcWQABwOo0Co8AE/smjQzIWkeHn9VbXIKghpAUSTyekWQkckgV2G4s4fXNI1LeMkuuarsuQizVgEUYsnTSKG5IB2Iw6SN/GzdevIEE+uxwc3VJmlteqltJLQ/IoUSUjvRAsD3rf4wkHSYOru+khOqDp/ELSAFHtYUaJ9rFfOJFmtPTsy07UTRTQO0ciMOirKeiD+wRzvIWl1IWg2DuP1i642ppZbWKINEfIzpnwOHt5LaaE14QVzqeV/OTyMcRaNQXIUE/0O+gT64q+LKbajuJTZ85virNE7b/6cbvB9uPSWlKpPkO83QsDfa/4MFoFHVNE2jH7tsm54u5Dhplu16OLaSaxbmT2ie0VY18gO2Yj19A8Jq7szVYi4EVhSS4OkqXQSkHk8kk1wB95XRmYWjzG9QlyEqDZ6glFlSiNwOAAL5JPHtiHn8vNsGdyOesoqS5G3LbdV+laRyxA/XvjBEjJhx0R07hAA+hWLU2SqbJckrFFair7N4ClksjjWkbHX7NUzRmKQwyshdD9qej7B/w8u6y09QdSDW4sXR74Np91iy0opsUaJFjtt7ZX4XBZOTJn/9k=",
-        #If your plugin uses/needs custom arguments, input their name here. 
-        #This name will be displayed in plugin configuration next to an input box for global arguments, and in archive edition for one-shot arguments.
-        oneshot_arg => "Pixiv artwork URL or illustration ID (e.g. pixiv.net/en/artworks/123456 or 123456.)",
+        icon        => "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAUABQDAREAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAwYABAUH/8QAJBAAAgICAgICAgMAAAAAAAAAAQIDBAUGABESIQcxImETQVH/xAAZAQACAwEAAAAAAAAAAAAAAAADBgACCAX/xAAoEQABBAEDAgYDAQAAAAAAAAABAgMEEQAFITESUQYTFEFhkTJxocH/2gAMAwEAAhEDEQA/ANfRvi3MbpRvZxrlfG4jHQT2J7U35PIsKB5FhjHuRgpHf0B5DsjvmrNV15nTHERwkrcWQABwOo0Co8AE/smjQzIWkeHn9VbXIKghpAUSTyekWQkckgV2G4s4fXNI1LeMkuuarsuQizVgEUYsnTSKG5IB2Iw6SN/GzdevIEE+uxwc3VJmlteqltJLQ/IoUSUjvRAsD3rf4wkHSYOru+khOqDp/ELSAFHtYUaJ9rFfOJFmtPTsy07UTRTQO0ciMOirKeiD+wRzvIWl1IWg2DuP1i642ppZbWKINEfIzpnwOHt5LaaE14QVzqeV/OTyMcRaNQXIUE/0O+gT64q+LKbajuJTZ85virNE7b/6cbvB9uPSWlKpPkO83QsDfa/4MFoFHVNE2jH7tsm54u5Dhplu16OLaSaxbmT2ie0VY18gO2Yj19A8Jq7szVYi4EVhSS4OkqXQSkHk8kk1wB95XRmYWjzG9QlyEqDZ6glFlSiNwOAAL5JPHtiHn8vNsGdyOesoqS5G3LbdV+laRyxA/XvjBEjJhx0R07hAA+hWLU2SqbJckrFFair7N4ClksjjWkbHX7NUzRmKQwyshdD9qej7B/w8u6y09QdSDW4sXR74Np91iy0opsUaJFjtt7ZX4XBZOTJn/9k=",
+        # 如果你的插件使用/需要自定义参数，请在此输入其名称。
+        # 这个名称将在插件配置中显示在全局参数的输入框旁边，并在归档编辑中显示为一次性参数。
+        oneshot_arg => "Pixiv 艺术作品 URL 或插图 ID（例如 pixiv.net/en/artworks/123456 或 123456。）",
         parameters  => [
-            { type => 'string', desc => 'Comma-separated list of languages to support. Options: jp, en. Empty string defaults to original tags (jp) only.' }
+            { type => 'string', desc => '支持的语言的逗号分隔列表。选项：jp，en。空字符串默认为原始标签（jp）' }
         ],
         cooldown    => 1
     );
 
 }
 
-#Mandatory function to be implemented by your plugin
+# 插件需要实现的强制性函数
 sub get_tags {
 
     shift;
-    my $lrr_info = shift; # Global info hash, contains various metadata provided by LRR
+    my $lrr_info = shift; # 全局信息哈希，包含 LRR 提供的各种元数据
     my $ua = $lrr_info -> {user_agent};
     my $logger = get_plugin_logger();
     my ( $tag_languages_str ) = @_;
 
     my $illust_id = find_illust_id( $lrr_info );
     if ($illust_id ne '') {
-        $logger -> debug("Retrieved Pixiv illustration ID = $illust_id");
+        $logger -> debug("获取到 Pixiv 插图 ID = $illust_id");
 
-        #Work your magic here - You can create subroutines below to organize the code better
+        # 在这里施展你的魔法 - 你可以在下面创建子例程以更好地组织代码
         my %metadata = get_metadata_from_illust_id( $illust_id, $ua , $tag_languages_str );
 
-        #Otherwise, return the tags you've harvested.
-        $logger -> info( "Sending the following tags to LRR: " . $metadata{tags} );
+        # 否则，返回你收集到的标签。
+        $logger -> info( "发送以下标签到 LRR: " . $metadata{tags} );
         return %metadata;
     } else {
-        $logger -> error( "Failed to extract Pixiv ID!" );
+        $logger -> error( "提取 Pixiv ID 失败！" );
     }
 
 }
 
 ######
-## Pixiv Specific Methods
+## Pixiv 特定方法
 ######
 
-# convert formatted date to epoch time in seconds.
+# 将格式化的日期转换为秒级 epoch 时间。
 sub _convert_epoch_seconds {
     my ( $formattedDate ) = @_;
 
@@ -84,24 +85,24 @@ sub _convert_epoch_seconds {
     return $epoch_seconds;
 }
 
-# sanitize the text according to the search syntax: https://sugoi.gitbook.io/lanraragi/basic-operations/searching
+# 根据搜索语法清理文本：https://sugoi.gitbook.io/lanraragi/basic-operations/searching
 sub sanitize {
 
     my ( $text ) = @_;
     my $sanitized_text = $text;
 
-    # replace nonseparator characters with empty str.
+    # 将非分隔符字符替换为空字符串。
     $sanitized_text =~ s/["?*%\$:]//g;
 
-    # replace underscore with space.
+    # 将下划线替换为空格。
     $sanitized_text =~ s/[_]/ /g;
 
-    # if a dash is preceded by space, remove; otherwise keep.
+    # 如果一个连字符前面有空格，则去掉；否则保留。
     $sanitized_text =~ s/ -/ /g;
 
     if ( $sanitized_text ne $text ) {
         my $logger = get_plugin_logger();
-        $logger -> info("\"$text\" was sanitized.");
+        $logger -> info("\"$text\" 已被清理。");
     }
 
     return $sanitized_text;
@@ -117,24 +118,24 @@ sub find_illust_id {
     my $logger = get_plugin_logger();
 
     if (defined $oneshot_param) {
-        # case 1: "$illust_id" i.e. string of digits.
+        # 情况 1: "$illust_id" 即数字字符串。
         if ($oneshot_param =~ /^\d+$/) {
             return $oneshot_param;
         }
-        # case 2: URL-based embedding
+        # 情况 2: 基于 URL 的嵌入
         if ($oneshot_param =~ m{.*pixiv\.net/.*artworks/(\d+)}) {
             return $1;
         }
     }
 
     if (defined $archive_title) {
-        # case 3: archive title extraction (strong pattern matching)
-        # use strong pattern matching if using multiple metadata plugins and archive title needs to exclusively call the pixiv plugin.
+        # 情况 3: 归档标题提取（强模式匹配）
+        # 如果使用多个元数据插件，并且归档标题需要专门调用 pixiv 插件，则使用强模式匹配。
         if ($archive_title =~ /pixiv_\{(\d*)\}.*$/) {
             return $1;
         }
 
-        # case 4: archive title extraction (weak pattern matching)
+        # 情况 4: 归档标题提取（弱模式匹配）
         if ($archive_title =~ /^\{(\d*)\}.*$/) {
             return $1;
         }
@@ -145,13 +146,13 @@ sub find_illust_id {
 }
 
 sub get_illustration_dto_from_json {
-    # retrieve relevant data obj from json obj
+    # 从 json 对象中获取相关数据对象
     my ( $json, $illust_id ) = @_;
     return %{$json -> {'illust'} -> { $illust_id }};
 }
 
 sub get_manga_data_from_dto {
-    # get manga-based data and return as an array.
+    # 获取基于漫画的数据并返回为数组。
     my ( $dto ) = @_;
     my @manga_data;
 
@@ -180,7 +181,7 @@ sub get_pixiv_tags_from_dto {
     my ( $dto, $tag_languages_str ) = @_;
     my @tags;
 
-    # extract tag languages.
+    # 提取标签语言。
     my @tag_languages;
     if ( $tag_languages_str eq "" ) {
         push @tag_languages, "jp";
@@ -194,11 +195,11 @@ sub get_pixiv_tags_from_dto {
 
     foreach my $item ( @{$dto -> {"tags"} -> {"tags"}} ) {
             
-        # iterate over tagging language.
+        # 遍历标签语言。
         foreach my $tag_language ( @tag_languages ) {
 
             if ($tag_language eq 'jp') {
-                # add original/jp tags.
+                # 添加原始/jp 标签。
                 my $orig_tag = $item -> {"tag"};
                 if (defined $orig_tag) {
                     $orig_tag = sanitize($orig_tag);
@@ -207,7 +208,7 @@ sub get_pixiv_tags_from_dto {
 
             } 
             else {
-                # add translated tags.
+                # 添加翻译标签。
                 my $translated_tag = $item -> {"translation"} -> { $tag_language };
                 if (defined $translated_tag) {
                     $translated_tag = sanitize($translated_tag);
@@ -275,7 +276,7 @@ sub get_hash_metadata_from_json {
     my $logger = get_plugin_logger();
     my %hashdata;
 
-    # get illustration metadata.
+    # 获取插图元数据。
     my %illust_dto = get_illustration_dto_from_json($json, $illust_id);
     my @lrr_tags;
 
@@ -284,17 +285,17 @@ sub get_hash_metadata_from_json {
     push (@lrr_tags, @manga_data);
     push (@lrr_tags, @pixiv_tags);
 
-    # add source
+    # 添加来源
     my $source = "https://pixiv.net/artworks/$illust_id";
     push @lrr_tags, "source:$source";
 
-    # add general metadata.
+    # 添加一般元数据。
     my @user_id_data = get_user_id_from_dto( \%illust_dto );
     my @user_name_data = get_artist_from_dto( \%illust_dto );
     push (@lrr_tags, @user_id_data);
     push (@lrr_tags, @user_name_data);
 
-    # add time-based metadata.
+    # 添加基于时间的元数据。
     my @create_date_epoch_data = get_create_date_from_dto( \%illust_dto );
     my @upload_date_epoch_data = get_upload_date_from_dto( \%illust_dto );
     push (@lrr_tags, @create_date_epoch_data);
@@ -302,13 +303,13 @@ sub get_hash_metadata_from_json {
 
     $hashdata{tags} = join( ', ', @lrr_tags );
 
-    # change title.
+    # 更改标题。
     my $illust_title = $illust_dto{"illustTitle"};
     if (defined $illust_title) {
         $illust_title = sanitize($illust_title);
         $hashdata{title} = $illust_title;
     } else {
-        $logger -> error("Failed to extract illustration title from json file: " . Dumper($json));
+        $logger -> error("从 json 文件中提取插图标题失败: " . Dumper($json));
     }
 
     return %hashdata;
@@ -320,11 +321,11 @@ sub get_json_from_html {
     my ( $html ) = @_;
     my $logger = get_plugin_logger();
 
-    # get 'content' body.
+    # 获取 'content' 内容体。
     my $dom = Mojo::DOM -> new($html);
     my $jsonstring = $dom -> at('meta#meta-preload-data') -> attr('content');
     
-    $logger -> debug("Tentative JSON: $jsonstring");
+    $logger -> debug("初步 JSON: $jsonstring");
     my $json = decode_json $jsonstring;
     return $json;
 
@@ -335,7 +336,7 @@ sub get_html_from_illust_id {
     my ( $illust_id, $ua ) = @_;
     my $logger = get_plugin_logger();
 
-    # illustration ID to URL.
+    # 插图 ID 到 URL。
     my $URL = "https://www.pixiv.net/en/artworks/$illust_id/";
 
     while (1) {
@@ -346,28 +347,28 @@ sub get_html_from_illust_id {
             }
         ) -> result;
         my $code = $res -> code;
-        $logger -> debug("Received code $code.");
+        $logger -> debug("收到代码 $code。");
 
-        # handle 3xx.
+        # 处理 3xx。
         if ( $code == 301 ) {
             $URL = $res -> headers -> location;
-            $logger -> debug("Redirecting to $URL");
+            $logger -> debug("重定向到 $URL");
             next;
         }
         if ( $code == 302 ) {
             my $location = $res -> headers -> location;
             $URL = "pixiv.net$location";
-            $logger -> debug("Redirecting to $URL");
+            $logger -> debug("重定向到 $URL");
             next;
         }
 
-        # handle 4xx.
+        # 处理 4xx。
         if ( $res -> is_error ) {
             my $code = $res -> code;
             return "error ($code) ";
         }
 
-        # handle 2xx.
+        # 处理 2xx。
         return $res -> body;
 
     }
@@ -378,13 +379,13 @@ sub get_metadata_from_illust_id {
     my ( $illust_id, $ua, $tag_languages_str ) = @_;
     my $logger = get_plugin_logger();
 
-    # initialize hash.
+    # 初始化哈希。
     my %hashdata = ( tags => "" );
 
     my $html = get_html_from_illust_id( $illust_id, $ua );
 
     if ( $html =~ /^error/ ) {
-        return ( error => "Error retrieving HTML from Pixiv Illustration: $html");
+        return ( error => "从 Pixiv 插图获取 HTML 时出错: $html");
     }
 
     my $json = get_json_from_html( $html );

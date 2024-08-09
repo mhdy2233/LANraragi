@@ -1,38 +1,38 @@
 package LANraragi::Plugin::Download::Chaika;
-
+use utf8;
 use strict;
 use warnings;
 no warnings 'uninitialized';
 
-# Meta-information about your plugin.
+# 关于插件的元信息。
 sub plugin_info {
 
     return (
-        # Standard metadata
-        name        => "Chaika.moe Downloader",
-        type        => "download",
-        namespace   => "chaikadl",
-        author      => "Difegue",
-        version     => "1.0",
-        description => "下载给定的 chaika.moe URL 并将其添加到 LANraragi。 暂时不支持图库链接!",
+        # 标准元数据
+        name        => "Chaika.moe 下载器",             # 插件名称
+        type        => "download",                    # 插件类型：下载器
+        namespace   => "chaikadl",                    # 命名空间
+        author      => "Difegue",                     # 作者
+        version     => "1.0",                         # 版本号
+        description => "下载给定的 chaika.moe 链接并将其添加到 LANraragi。暂不支持画廊链接！",  # 插件描述
 
-        # Downloader-specific metadata
+        # 下载器特定的元数据
         # https://panda.chaika.moe/archive/_____/
-        url_regex => "https?:\/\/panda.chaika.moe\/archive\/.*"
+        url_regex => "https?:\/\/panda.chaika.moe\/archive\/.*"  # URL 正则表达式
     );
 
 }
 
-# Mandatory function to be implemented by your downloader
+# 下载器必须实现的函数
 sub provide_url {
     shift;
     my $lrr_info = shift;
 
-    # Get the URL to download
+    # 获取要下载的 URL
     my $url = $lrr_info->{url};
 
-    # Wow!
-    return ( download_url => $url . "/download" );
+    # 哇！
+    return ( download_url => $url . "/download" );  # 返回带有 /download 后缀的下载链接
 }
 
 1;
