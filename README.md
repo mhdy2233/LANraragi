@@ -1,62 +1,56 @@
-[<img src="https://img.shields.io/docker/pulls/difegue/lanraragi.svg">](https://hub.docker.com/r/difegue/lanraragi/)
-[<img src="https://img.shields.io/github/downloads/difegue/lanraragi/total.svg">](https://github.com/Difegue/LANraragi/releases)
-[<img src="https://img.shields.io/github/release/difegue/lanraragi.svg?label=latest%20release">](https://github.com/Difegue/LANraragi/releases/latest)
-[<img src="https://img.shields.io/homebrew/v/lanraragi.svg">](https://formulae.brew.sh/formula/lanraragi)
-[<img src="https://img.shields.io/website/https/lrr.tvc-16.science.svg?label=demo%20website&up_message=online">](https://lrr.tvc-16.science/)
-[<img src="https://github.com/Difegue/LANraragi/actions/workflows/push-continuous-integration.yml/badge.svg">](https://github.com/Difegue/LANraragi/actions)
-[<img src="https://img.shields.io/discord/612709831744290847">](https://discord.gg/aRQxtbg)
-
-
-<img src="public/favicon.ico" width="128">  
-  
-LANraragi
+LANraragi   
 ===========
 
-Open source server for archival of comics/manga, running on Mojolicious + Redis.
+开源漫画/漫画存档服务器，基于Mojolicious + Redis运行。
 
-#### 💬 Talk with other fellow LANraragi Users on [Discord](https://discord.gg/aRQxtbg) or [GitHub Discussions](https://github.com/Difegue/LANraragi/discussions)  
+默认使用存储卷可根据需要自行更换为本机目录，存储卷须手动提升权限777
 
-####  [📄 Documentation](https://sugoi.gitbook.io/lanraragi/v/dev) | [⏬ Download](https://github.com/Difegue/LANraragi/releases/latest) | [🎞 Demo](https://lrr.tvc-16.science) | [🪟🌃 Windows Nightlies](https://nightly.link/Difegue/LANraragi/workflows/push-continous-delivery/dev) | [💵 Sponsor Development](https://ko-fi.com/T6T2UP5N)  
+docker安装请docker pull mhdy2233/lanraragi_cn_mhdy:0.2
 
-## Screenshots  
- 
-|Main Page, Thumbnail View | Main Page, List View |
+1panel安装请将该目录https://github.com/mhdy2233/appstore/tree/localApps/apps/lanraragi 下载到该路径1panel/resource/apps/local/
+
+#### 💬 与其他LANraragi用户在[Discord](https://discord.gg/aRQxtbg)或[GitHub Discussions](https://github.com/Difegue/LANraragi/discussions)交流  
+
+####  [📄 文档](https://sugoi.gitbook.io/lanraragi/v/dev) | [⏬ 下载](https://github.com/Difegue/LANraragi/releases/latest) | [🎞 演示](https://lrr.tvc-16.science) | [🪟🌃 Windows Nightlies](https://nightly.link/Difegue/LANraragi/workflows/push-continous-delivery/dev) | [💵 赞助开发](https://ko-fi.com/T6T2UP5N)  
+
+## 截图
+
+|主页，缩略图视图 | 主页，列表视图 |
 |---|---|
-| [![archive_thumb](./tools/_screenshots/archive_thumb.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/archive_thumb.png) | [![archive_list](./tools/_screenshots/archive_list.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/archive_list.png) |
+| [![archive_thumb](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/archive_thumb.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/archive_thumb.png) | [![archive_list](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/archive_list.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/archive_list.png) |
 
-|Archive Reader | Reader with overlay |
+|档案阅读器 | 带叠加层的阅读器 |
 |---|---|
-| [![reader](./tools/_screenshots/reader.jpg)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/reader.jpg) | [![reader_overlay](./tools/_screenshots/reader_overlay.jpg)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/reader_overlay.jpg) |
+| [![reader](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/reader.jpg)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/reader.jpg) | [![reader_overlay](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/reader_overlay.jpg)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/reader_overlay.jpg) |
 
-
-|Configuration | Plugin Configuration |
+|配置 | 插件配置 |
 |---|---|
-| [![cfg](./tools/_screenshots/cfg.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/cfg.png) | [![cfg_plugin](./tools/_screenshots/cfg_plugin.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/cfg_plugin.png) |
+| [![cfg](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/cfg_plugin.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/cfg.png) | [![cfg_plugin](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/cfg_plugin.png)](https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/_screenshots/cfg_plugin.png) |
 
-## Features  
+## 特点
 
-* Stores your comics in archive format. (zip/rar/targz/lzma/7z/xz/cbz/cbr/pdf supported, barebones support for epub)  
+* 将漫画存储为压缩档案格式。（支持zip/rar/targz/lzma/7z/xz/cbz/cbr/pdf，基本支持epub）
 
-* Read archives directly from your web browser: the server reads from within compressed files using temporary folders.
+* 直接从Web浏览器读取档案：服务器使用临时文件夹从压缩文件中读取。
 
-* Read your archives in dedicated reader software using the built-in OPDS Catalog (now with PSE support!)
+* 使用内置的OPDS目录（现已支持PSE）在专用阅读器软件中阅读你的档案！
 
-* Use the Client API to interact with LANraragi from other programs (Available for [many platforms!](https://sugoi.gitbook.io/lanraragi/v/dev/advanced-usage/external-readers))
+* 使用客户端API与LANraragi进行交互（适用于[多种平台！](https://sugoi.gitbook.io/lanraragi/v/dev/advanced-usage/external-readers)）
 
-* Two different user interfaces : compact archive list with thumbnails-on-hover, or thumbnail view.
+* 两种不同的用户界面：带悬停缩略图的紧凑档案列表或缩略图视图。
 
-* Choose from 5 preinstalled responsive library styles, or add your own with CSS.  
+* 从5种预装的响应式库样式中选择，或使用CSS添加自己的样式。
 
-* Full Tag support with Namespaces: Add your own or import them from other sources using Plugins.  
+* 完整的标签支持和命名空间：添加自己的标签或使用插件从其他来源导入。
 
-* Store archives in either arbitary or dynamic Categories to sort your Library easily
+* 将档案存储在任意或动态分类中，轻松排序你的库。
 
-* Import metadata using Plugins automatically when archives are added to LANraragi.
+* 在档案添加到LANraragi时，使用插件自动导入元数据。
 
-* Download archives from the Internet directly to the server, while using the aforementioned automatic metadata import
+* 直接从互联网下载档案到服务器，同时使用上述的自动元数据导入。
 
-* Backup your database as JSON to carry your tags over to another LANraragi instance.
+* 将数据库备份为JSON格式，将标签转移到另一个LANraragi实例。
 
-## Make a PR, get stickers™  
+## 提交PR，获取贴纸™
 
-Merged PRs to this repo(or $5+ donations) are eligible to get a dumb sticker pack [shipped on the house.](https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAN__osxt25URTdTUTVBVFRCTjlYWFJLMlEzRTJPUEhEVy4u)  
+合并到此repo的PR（或捐赠$5以上）有资格获得[免费贴纸包](https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAN__osxt25URTdTUTVBVFRCTjlYWFJLMlEzRTJPUEhEVy4u)。
